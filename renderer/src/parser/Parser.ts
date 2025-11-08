@@ -40,6 +40,7 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
   { virtual: findInDatabase },
   // -----------
   parseItemLevel,
+  parseRequirements,
   parseTalismanTier,
   parseGem,
   parseArmour,
@@ -413,6 +414,18 @@ function parseItemLevel (section: string[], item: ParsedItem) {
       return 'SECTION_PARSED'
     }
   }
+  return 'SECTION_SKIPPED'
+}
+
+function parseRequirements (section: string[], item: ParsedItem) {
+  if (section[0] !== _$.REQUIREMENTS) return 'SECTION_SKIPPED'
+
+  for (const line of section.slice(1)) {
+    if (!line.startsWith(_$.REQUIRED_LEVEL)) continue
+    item.requiredLevel = Number(line.slice(_$.REQUIRED_LEVEL.length))
+    return 'SECTION_PARSED'
+  }
+
   return 'SECTION_SKIPPED'
 }
 

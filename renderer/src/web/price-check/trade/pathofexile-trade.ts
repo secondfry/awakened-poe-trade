@@ -138,6 +138,7 @@ interface TradeRequest { /* eslint-disable camelcase */
           stack_size?: FilterRange
           memory_level?: FilterRange
           foulborn_item?: FilterBoolean
+          required_level?: FilterRange
         }
       }
       armour_filters?: {
@@ -349,6 +350,11 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
     if (filters.itemLevel.max) {
       propSet(query.filters, 'misc_filters.filters.ilvl.max', filters.itemLevel.max)
     }
+  }
+
+  if (filters.requiredLevel && !filters.requiredLevel.disabled) {
+    propSet(query.filters, 'req_filters.filters.lvl.min', filters.requiredLevel.value)
+    propSet(query.filters, 'req_filters.filters.lvl.max', filters.requiredLevel.max ?? 10)
   }
 
   if (filters.stackSize && !filters.stackSize.disabled) {

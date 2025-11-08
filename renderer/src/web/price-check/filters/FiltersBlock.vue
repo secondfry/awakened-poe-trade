@@ -17,6 +17,8 @@
         :filter="{ disabled: false }" text="Magic" />
       <filter-btn-logical v-if="filters.discriminator?.value" readonly
         :filter="{ disabled: false }" :text="filters.discriminator.value" />
+      <filter-btn-numeric v-if="filters.requiredLevel"
+        :filter="filters.requiredLevel" :name="t('item.required_level')" />
       <filter-btn-numeric v-if="filters.itemLevel"
         :filter="filters.itemLevel" :name="t('item.item_level')" />
       <filter-btn-numeric v-if="filters.stackSize"

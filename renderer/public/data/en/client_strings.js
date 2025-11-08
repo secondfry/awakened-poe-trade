@@ -15,6 +15,8 @@ export default {
   ITEM_LEVEL: 'Item Level: ',
   CORPSE_LEVEL: 'Corpse Level: ',
   TALISMAN_TIER: 'Talisman Tier: ',
+  REQUIREMENTS: 'Requirements:',
+  REQUIRED_LEVEL: 'Level: ',
   GEM_LEVEL: 'Level: ',
   STACK_SIZE: 'Stack Size: ',
   SOCKETS: 'Sockets: ',

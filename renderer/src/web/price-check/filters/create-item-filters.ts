@@ -296,6 +296,12 @@ export function createFilters (
           value: Math.min(item.itemLevel, 86),
           disabled: (!opts.exact || item.category === ItemCategory.Flask || item.category === ItemCategory.Tincture)
         }
+
+        filters.requiredLevel = {
+          value: 0,
+          max: item.requiredLevel ? (item.requiredLevel - item.requiredLevel % 2) + 4 : 10,
+          disabled: false
+        }
       }
     }
 

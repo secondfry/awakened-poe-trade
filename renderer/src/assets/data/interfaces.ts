@@ -123,6 +123,8 @@ export interface TranslationDict {
   ITEM_LEVEL: string
   CORPSE_LEVEL: string
   TALISMAN_TIER: string
+  REQUIREMENTS: string
+  REQUIRED_LEVEL: string
   GEM_LEVEL: string
   STACK_SIZE: string
   SOCKETS: string

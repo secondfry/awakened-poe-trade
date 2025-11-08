@@ -22,6 +22,7 @@ export enum ItemInfluence {
 export interface ParsedItem {
   rarity?: ItemRarity
   itemLevel?: number
+  requiredLevel?: number
   armourAR?: number
   armourEV?: number
   armourES?: number
