@@ -4,6 +4,7 @@ Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-tr
 
 - Runs as secondfry-poe-trade, with its own User-Agent and settings folder (%APPDATA%\secondfry-poe-trade), and updates from this fork's GitHub releases.
 - Required level filter on gear price checks.
+- Viscera implicits that share their text with a gear stat (fortification, spell suppression, pierce) are searched by trade's Viscera stat id, so they find Viscera.
 
 ---
 
