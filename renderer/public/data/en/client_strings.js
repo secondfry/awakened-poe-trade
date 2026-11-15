@@ -58,6 +58,7 @@ export default {
   METAMORPH_HELP: "Combine this with four other different samples in Tane's Laboratory.",
   BEAST_HELP: 'Right-click to add this to your bestiary.',
   VOIDSTONE_HELP: 'Socket this into your Atlas to empower Maps.',
+  VISCERA_HELP: 'Take this to the Wickerman in a town or hideout to attach it.',
   METAMORPH_BRAIN: /^.* Brain$/,
   METAMORPH_EYE: /^.* Eye$/,
   METAMORPH_LUNG: /^.* Lung$/,

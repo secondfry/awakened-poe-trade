@@ -180,6 +180,7 @@ export interface TranslationDict {
   METAMORPH_HELP: string
   BEAST_HELP: string
   VOIDSTONE_HELP: string
+  VISCERA_HELP: string
   METAMORPH_BRAIN: RegExp
   METAMORPH_EYE: RegExp
   METAMORPH_LUNG: RegExp

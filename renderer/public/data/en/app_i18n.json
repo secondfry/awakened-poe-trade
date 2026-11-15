@@ -157,7 +157,8 @@
     "azmeri_charm": "Charm",
     "idol": "Idol",
     "graft": "Graft",
-    "chart": "Chart"
+    "chart": "Chart",
+    "viscera": "Viscera"
   },
   "filters": {
     "selected_some": "{0} of {1}, stats",

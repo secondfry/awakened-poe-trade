@@ -5,8 +5,9 @@
 //     has CANNOT_USE_ITEM as its 3rd line, that line is dropped and the
 //     nameplate is merged back into one section.
 //  2. parseNamePlate consumes sections[0]: name, baseType (4th line, if any),
-//     rarity, and category for three rarity texts only. The Item Class line
-//     is checked to exist, but its value is discarded: it never sets category.
+//     rarity (when there is a Rarity line), and category for three rarity
+//     texts only. The Item Class line is checked to exist, but its value is
+//     discarded: it never sets category.
 //  3. The `parsers` array, in order. A section parser is offered the
 //     remaining sections one by one: SECTION_PARSED removes that section so
 //     no later parser sees it, PARSER_SKIPPED stops offering sections to it.
@@ -16,7 +17,8 @@
 //        parseSuperior, parseFoulborn, parseVestigial, parseSynthesised,
 //        parseCategoryByHelpText, parseMapTier. They set flags and strip
 //        prefixes/suffixes so name/baseType match a database name.
-//     b. normalizeName: magic name -> base type, metamorph name -> organ.
+//     b. normalizeName: magic or Viscera name -> base type, metamorph name
+//        -> organ.
 //     c. findInDatabase: info, infoVariants, and category from the database.
 //        Fails with 'item.unknown' if nothing is found.
 //     d. Property section parsers (below the "// -----" line). They may read
@@ -29,13 +31,14 @@
 //        uniqueBase), calcDisenchantDust, calcBasePercentile.
 //
 // When rarity and category become known:
-//  - rarity is set only in parseNamePlate: Normal (also Quest), Magic, Rare,
-//    Unique. Currency, divination card and gem items keep rarity undefined
+//  - rarity is set in parseNamePlate: Normal (also Quest), Magic, Rare,
+//    Unique; and in parseCategoryByHelpText, Normal for Viscera, which have
+//    no Rarity line. Currency, divination card and gem items keep rarity undefined
 //    for the whole parse, so rarity-gated parsers (parseModifiers, parseFoil,
 //    parseSuperior, parseFoulborn) skip them.
 //  - category comes from, in order: parseNamePlate (Currency, DivinationCard,
 //    Gem, from the rarity text), parseCategoryByHelpText (CapturedBeast,
-//    MetamorphSample, Voidstone), else findInDatabase from
+//    MetamorphSample, Voidstone, Viscera), else findInDatabase from
 //    info.craftable.category (or the unique's base). Before findInDatabase
 //    category is undefined for every other item.
 //
@@ -55,6 +58,10 @@
 //    English "Metamorph <organ>"; info from ITEM by that name.
 //  - Voidstones: parseCategoryByHelpText; findInDatabase ignores the name and
 //    always uses ITEM ref 'Charged Compass'.
+//  - Viscera: no Rarity line; parseCategoryByHelpText sets category and
+//    rarity Normal, so parseModifiers reads the implicit; normalizeName drops
+//    the tier word ("Lesser", "Greater") to get the base; info from ITEM by
+//    that name.
 //  - Maps: parseMapTier strips " (Tier N)" before the lookup; category Map
 //    from the database; parseMap; tier-specific variants in
 //    pickCorrectVariant.
@@ -253,10 +260,12 @@ function itemTextToSections (text: string) {
 // Stage b, virtual. Rewrites item.name into a database name.
 // Magic: replaces the affixed name with the longest craftable base found in
 // it; runs on every magic item, whatever its category.
+// Viscera: the same, to drop the tier word; needs parseCategoryByHelpText
+// to have run.
 // MetamorphSample: needs parseCategoryByHelpText to have run; maps the
 // organ name to an English 'Metamorph <organ>' name.
 function normalizeName (item: ParserState) {
-  if (item.rarity === ItemRarity.Magic) {
+  if (item.rarity === ItemRarity.Magic || item.category === ItemCategory.Viscera) {
     const baseType = magicBasetype(item.name)
     if (baseType) {
       item.name = baseType
@@ -279,9 +288,9 @@ function normalizeName (item: ParserState) {
 }
 
 // Stage c, virtual. Reads category (only the early ones: Currency,
-// DivinationCard, Gem, CapturedBeast, MetamorphSample, Voidstone), rarity,
-// isUnidentified, name and baseType, so it must run after every name/baseType
-// cleanup above it. Branch order matters: the category branches come before
+// DivinationCard, Gem, CapturedBeast, MetamorphSample, Voidstone, Viscera),
+// rarity, isUnidentified, name and baseType, so it must run after every
+// name/baseType cleanup above it. Branch order matters: the category branches come before
 // the unique branch, so e.g. a unique-rarity metamorph sample is looked up in ITEM.
 // Writes infoVariants, info (first variant for now, pickCorrectVariant
 // replaces it) and, if still unset, category from the database.
@@ -472,9 +481,10 @@ function _pickCorrectVariant (variants: BaseType[], item: ParsedItem): BaseType 
 // Lines: Item Class (only checked, value discarded), optional Rarity, name,
 // optional baseType. baseType is only there when the item shows two name
 // lines (rare, identified unique, ...); otherwise the base is in name.
-// Sets rarity (the only place it is ever set) and category for Currency,
-// DivinationCard and Gem, which keep rarity undefined. Everything else has
-// category undefined until parseCategoryByHelpText or findInDatabase.
+// Sets rarity (elsewhere only parseCategoryByHelpText sets it, for Viscera) and
+// category for Currency, DivinationCard and Gem, which keep rarity
+// undefined. Everything else has category undefined until
+// parseCategoryByHelpText or findInDatabase.
 function parseNamePlate (section: string[]) {
   let line = section.shift()
   if (!line?.startsWith(_$.ITEM_CLASS)) {
@@ -1149,8 +1159,8 @@ function parseVestigial (item: ParserState) {
 }
 
 // Pre-lookup. The only place category is set from item text besides the
-// rarity line: CapturedBeast, MetamorphSample, Voidstone from their help
-// text. Must run before normalizeName and findInDatabase, which branch on it.
+// rarity line: CapturedBeast, MetamorphSample, Voidstone, Viscera from their
+// help text. Must run before normalizeName and findInDatabase, which branch on it.
 function parseCategoryByHelpText (section: string[], item: ParsedItem) {
   if (section[0] === _$.BEAST_HELP) {
     item.category = ItemCategory.CapturedBeast
@@ -1160,6 +1170,13 @@ function parseCategoryByHelpText (section: string[], item: ParsedItem) {
     return 'SECTION_PARSED'
   } else if (section[0] === _$.VOIDSTONE_HELP) {
     item.category = ItemCategory.Voidstone
+    return 'SECTION_PARSED'
+  } else if (section[0] === _$.VISCERA_HELP) {
+    item.category = ItemCategory.Viscera
+    // No Rarity line, and trade finds 0 Magic Viscera, so all are Normal.
+    // Normal lets parseModifiers read the implicit and the exact preset and
+    // 100% range apply.
+    item.rarity ??= ItemRarity.Normal
     return 'SECTION_PARSED'
   }
 

@@ -4,6 +4,7 @@ Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-tr
 
 - Required level filter on gear price checks.
 - Recognizes affixes reworded in 3.30 Covens of Umbra, including map, area and atlas mods.
+- Viscera items (3.30 Covens of Umbra item class): base types, implicits, price check by base type or category.
 
 ---
 

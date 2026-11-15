@@ -58,6 +58,7 @@ export default {
   METAMORPH_HELP: '테인의 연구실에서 이 아이템을 다른 샘플과 조합하십시오.',
   BEAST_HELP: '우클릭으로 이것을 야수 도감에 추가하십시오.',
   VOIDSTONE_HELP: '아틀라스에 이 아이템을 장착하여 지도를 강화하십시오.',
+  VISCERA_HELP: 'Take this to the Wickerman in a town or hideout to attach it.',
   METAMORPH_BRAIN: /^Мозг: .*$/,
   METAMORPH_EYE: /^Глаз: .*$/,
   METAMORPH_LUNG: /^Лёгкое: .*$/,

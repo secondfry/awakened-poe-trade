@@ -58,6 +58,7 @@ export default {
   METAMORPH_HELP: '在塔恩的鍊金室將此與其他四個不同的樣本合成。',
   BEAST_HELP: '點擊右鍵將此加入你的獸獵寓言。',
   VOIDSTONE_HELP: '放置於輿圖中以強化你的地圖。',
+  VISCERA_HELP: 'Take this to the Wickerman in a town or hideout to attach it.',
   METAMORPH_BRAIN: /^.* 腦髓$/,
   METAMORPH_EYE: /^.* 眼睛$/,
   METAMORPH_LUNG: /^.* 肺臟$/,

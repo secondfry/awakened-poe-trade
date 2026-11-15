@@ -58,6 +58,7 @@ export default {
   METAMORPH_HELP: 'Объедините эту часть с четырьмя другими в Лаборатории Танэ.',
   BEAST_HELP: 'Нажмите ПКМ, чтобы добавить это в ваш Бестиарий.',
   VOIDSTONE_HELP: 'Поместите этот предмет в ваш Атлас, чтобы усилить карты.',
+  VISCERA_HELP: 'Take this to the Wickerman in a town or hideout to attach it.',
   METAMORPH_BRAIN: /^Мозг: .*$/,
   METAMORPH_EYE: /^Глаз: .*$/,
   METAMORPH_LUNG: /^Лёгкое: .*$/,
