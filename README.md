@@ -1,3 +1,11 @@
+## Fork changes
+
+Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-trade):
+
+- Required level filter on gear price checks.
+
+---
+
 # ![Awakener's Orb](https://web.poecdn.com/image/Art/2DItems/Currency/TransferOrb.png) Awakened PoE Trade
 
 [![](https://user-images.githubusercontent.com/4292308/153364874-dde23599-278c-4350-8d86-dadbc4b978b3.svg)](https://somsubhra.github.io/github-release-stats/?username=SnosMe&repository=awakened-poe-trade)

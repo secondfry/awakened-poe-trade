@@ -71,6 +71,7 @@ export interface ItemFilters {
     nameTrade: string
   }
   itemLevel?: FilterNumeric
+  requiredLevel?: FilterNumeric
   stackSize?: FilterNumeric
   unidentified?: {
     value: true
