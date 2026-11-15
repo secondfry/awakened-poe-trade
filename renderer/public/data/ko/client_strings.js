@@ -24,6 +24,8 @@ export default {
   ITEM_LEVEL: '아이템 레벨: ',
   CORPSE_LEVEL: '시신 레벨: ',
   TALISMAN_TIER: '부적 등급: ',
+  REQUIREMENTS: '요구 사항:',
+  REQUIRED_LEVEL: '레벨: ',
   GEM_LEVEL: '레벨: ',
   STACK_SIZE: '중첩 개수: ',
   SOCKETS: '홈: ',

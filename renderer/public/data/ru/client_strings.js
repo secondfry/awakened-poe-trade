@@ -24,6 +24,8 @@ export default {
   ITEM_LEVEL: 'Уровень предмета: ',
   CORPSE_LEVEL: 'Уровень трупа: ',
   TALISMAN_TIER: 'Уровень талисмана: ',
+  REQUIREMENTS: 'Требования:',
+  REQUIRED_LEVEL: 'Уровень: ',
   GEM_LEVEL: 'Уровень: ',
   STACK_SIZE: 'Размер стопки: ',
   SOCKETS: 'Гнезда: ',

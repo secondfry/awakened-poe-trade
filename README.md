@@ -3,6 +3,7 @@
 Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-trade):
 
 - Runs as secondfry-poe-trade, with its own User-Agent and settings folder (%APPDATA%\secondfry-poe-trade), and updates from this fork's GitHub releases.
+- Required level filter on gear price checks.
 
 ---
 

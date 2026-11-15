@@ -127,6 +127,11 @@ interface TradeRequest {
           }
         }
       }
+      req_filters?: {
+        filters: {
+          lvl?: FilterRange
+        }
+      }
       misc_filters?: {
         filters: {
           ilvl?: FilterRange
@@ -376,6 +381,11 @@ export function createTradeRequest (filters: ItemFilters, stats: FilterOrGroup[]
     if (filters.itemLevel.max) {
       propSet(query.filters, 'misc_filters.filters.ilvl.max', filters.itemLevel.max)
     }
+  }
+
+  if (filters.requiredLevel && !filters.requiredLevel.disabled && filters.requiredLevel.max != null) {
+    propSet(query.filters, 'req_filters.filters.lvl.min', filters.requiredLevel.value)
+    propSet(query.filters, 'req_filters.filters.lvl.max', filters.requiredLevel.max)
   }
 
   if (filters.stackSize && !filters.stackSize.disabled) {
