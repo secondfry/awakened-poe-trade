@@ -1,3 +1,104 @@
+// Clipboard parser: turns the text of a copied item into a ParsedItem.
+//
+// Stage order (parseClipboard):
+//  1. itemTextToSections splits on "--------" lines. Then, if the first
+//     section's 3rd line is CANNOT_USE_ITEM, parseClipboard drops that line
+//     and puts Item Class and Rarity in front of the next section, so the
+//     nameplate is one section again.
+//  2. parseNamePlate consumes sections[0]: name, baseType (the line after
+//     name, if any), rarity, and category for three rarity texts only. The
+//     Item Class line is checked to exist, but its value is discarded: it
+//     never sets category.
+//  3. The `parsers` array, in order. A section parser is offered the
+//     remaining sections one by one: SECTION_PARSED removes that section so
+//     no later parser sees it, PARSER_SKIPPED stops offering sections to it.
+//     A virtual parser runs once on the whole state. Sections that no parser
+//     takes are ignored.
+//     a. Before the lookup (item.info is undefined): parseUnidentified,
+//        parseSuperior, parseFoulborn, parseVestigial, parseSynthesised,
+//        parseCategoryByHelpText, parseMapTier. They set flags and strip
+//        prefixes/suffixes (or, for Viscera, replace the name) so
+//        name/baseType match a database name.
+//     b. normalizeName: magic name -> base type, metamorph name -> organ.
+//     c. findInDatabase: info, infoVariants, and category from the database.
+//        Fails with 'item.unknown' if nothing is found.
+//     d. Property section parsers (below the "// -----" line). They may read
+//        item.info and item.category; many are gated on category, rarity or
+//        info.refName and return PARSER_SKIPPED for other items.
+//     e. parseModifiers x4: each call takes one section with mod lines; the
+//        enchant/scourge/implicit/explicit labels are notes, not filters.
+//     f. Post-steps (virtual): augmentModifiers, transformToLegacyModifiers
+//        (statsByType), parseFractured, pickCorrectVariant (final info and
+//        uniqueBase), calcDisenchantDust, calcBasePercentile.
+//
+// When rarity and category become known:
+//  - rarity is set only in parseNamePlate: Normal (also Quest), Magic, Rare,
+//    Unique. Currency, divination card, gem and Viscera items keep rarity
+//    undefined for the whole parse, so rarity-gated parsers (parseModifiers,
+//    parseFoil, parseSuperior, parseFoulborn, parseVestigial) skip them;
+//    parseModifiers lets Viscera through by info.refName.
+//  - category comes from, in order: parseNamePlate (Currency, DivinationCard,
+//    Gem, from the rarity text), parseCategoryByHelpText (CapturedBeast,
+//    MetamorphSample, Voidstone), else findInDatabase from
+//    info.craftable.category (or the unique's base). Before findInDatabase
+//    category is undefined for every other item. The one exception after the
+//    lookup: parseViscera sets the Viscera slot category, which
+//    findInDatabase leaves undefined.
+//
+// Per item type:
+//  - Currency and stackables: category Currency from the rarity text;
+//    "Rarity: Normal" stackables keep category undefined (their database
+//    entries are not craftable); info from ITEM by name; parseStackSize.
+//    No modifiers are parsed for "Rarity: Currency".
+//  - Divination cards: category from the rarity text; info from
+//    DIVINATION_CARD by name; parseStackSize.
+//  - Gems: category from the rarity text; info from GEM by name. Transfigured
+//    gems are their own GEM entries, so they need no extra step.
+//    parseRequirements, parseGem (level, quality), parseVaalGem,
+//    parseImbuedGem. No parseModifiers.
+//  - Captured beasts: parseCategoryByHelpText; info from CAPTURED_BEAST by
+//    baseType ?? name.
+//  - Metamorph samples: parseCategoryByHelpText; normalizeName renames to an
+//    English "Metamorph <organ>"; info from ITEM by that name.
+//  - Voidstones: parseCategoryByHelpText; findInDatabase ignores the name and
+//    always uses ITEM ref 'Charged Compass'.
+//  - Viscera: no Rarity line, so rarity stays undefined. parseCategoryByHelpText
+//    renames the item to 'Viscera', dropping tier and base from the name;
+//    info is that one ITEM entry, which is not craftable, so category is
+//    still undefined after the lookup. parseViscera then sets the slot
+//    category (Head, Torso, Upper Limb, Lower Limb Viscera) from the
+//    one-line slot section; parseItemLevel, parseRequirements, and
+//    parseModifiers (let through by info.refName) for the implicit.
+//  - Maps: parseMapTier strips " (Tier N)" before the lookup; category Map
+//    from the database; parseMap; tier-specific variants in
+//    pickCorrectVariant.
+//  - Gear: the base comes from the name for normal and unidentified items
+//    (parseSuperior strips "Superior"), from the affixed name for magic items
+//    (normalizeName), from the baseType line for rare and identified unique
+//    items. Identified uniques look up UNIQUE by name, filtered to the
+//    baseType's base. Unidentified uniques resolve to the base item only;
+//    the UI later calls makeIdentifiedUnique. Then parseItemLevel,
+//    parseRequirements, parseArmour, parseWeapon, parseAccessory
+//    (jewellery/quiver), parseCorrupted, parseFoil (uniques), parseInfluence,
+//    parseSockets, parseMirrored, parseSplit, parseModifiers, parseFractured.
+//    Name/base prefixes: parseFoulborn, parseVestigial, parseSynthesised.
+//  - Unique variants: findInDatabase keeps all entries in infoVariants and
+//    takes the first; pickCorrectVariant picks by disc conditions at the end.
+//  - Flasks: parseFlask consumes the charges section so it is not read as
+//    mods. Tinctures: parseTincture (quality).
+//  - Jewels: no dedicated parser; category from the database, mods via
+//    parseModifiers.
+//  - Heist: parseHeistContract, parseHeistBlueprint (category-gated); heist
+//    gear takes the gear path.
+//  - Sanctum: Forbidden Tome area level via parseAreaLevel; relics take the
+//    gear path.
+//  - Logbooks: parseAreaLevel, parseLogbookArea (up to 3 areas).
+//  - Other refName-gated items: Chronicle of Atzoatl (parseAreaLevel,
+//    parseAtzoatlRooms), Mirrored Tablet, Filled Coffin (parseItemLevel reads
+//    Corpse Level, parseFilledCoffin), Scrying Orb, Mercenary Warrant
+//    (parseMercenary, parseMercenaryGems x6). Category-gated: Charts
+//    (parseChart), Sentinels (parseSentinelCharge).
+
 import { Result, ok, err } from 'neverthrow'
 import {
   CLIENT_STRINGS as _$,
@@ -29,7 +130,11 @@ interface ParserState extends ParsedItem {
   infoVariants: BaseType[]
 }
 
+// Order matters: a section taken by one parser is never seen by later ones,
+// and each parser may only read state set by parsers above it.
+// Above the "// -----" line item.info is not set yet.
 const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
+  // must run first: parseSuperior, parseFoulborn and findInDatabase read isUnidentified
   parseUnidentified,
   { virtual: parseSuperior },
   { virtual: parseFoulborn },
@@ -40,6 +145,7 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
   { virtual: normalizeName },
   { virtual: findInDatabase },
   // -----------
+  // From here item.info is set (findInDatabase errors otherwise); item.category is set unless the entry is neither craftable nor unique.
   parseItemLevel,
   parseRequirements,
   parseTalismanTier,
@@ -79,10 +185,12 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
   parseMercenaryGems,
   parseMercenaryGems,
   parseMercenaryGems,
+  // one entry per mod section; each takes whichever remaining section has mod lines first
   parseModifiers, // enchant
   parseModifiers, // scourge
   parseModifiers, // implicit
   parseModifiers, // explicit
+  // post-steps: all sections are parsed, newMods is final
   { virtual: augmentModifiers },
   { virtual: transformToLegacyModifiers },
   { virtual: parseFractured },
@@ -93,6 +201,8 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
 
 const VALUE_AUGMENTED = ' (augmented)'
 
+// Entry point. Runs parseNamePlate, then every entry of `parsers` in order.
+// Any exception thrown by a parser becomes 'item.parse_error'.
 export function parseClipboard (clipboard: string): Result<ParsedItem, string> {
   try {
     let sections = itemTextToSections(clipboard)
@@ -156,6 +266,11 @@ function itemTextToSections (text: string) {
   return sections.filter(section => section.length)
 }
 
+// Stage b, virtual. Rewrites item.name into a database name.
+// Magic: replaces the affixed name with the longest craftable base found in
+// it; runs on every magic item, whatever its category.
+// MetamorphSample: needs parseCategoryByHelpText to have run; maps the
+// organ name to an English 'Metamorph <organ>' name.
 function normalizeName (item: ParserState) {
   if (item.rarity === ItemRarity.Magic) {
     const baseType = magicBasetype(item.name)
@@ -179,6 +294,15 @@ function normalizeName (item: ParserState) {
   }
 }
 
+// Stage c, virtual. Reads category (only the early ones: Currency,
+// DivinationCard, Gem, CapturedBeast, MetamorphSample, Voidstone), rarity,
+// isUnidentified, name and baseType, so it must run after every name/baseType
+// cleanup above it. Branch order matters: the category branches come before
+// the unique branch, so e.g. a unique-rarity metamorph sample is looked up in ITEM.
+// Writes infoVariants, info (first variant for now, pickCorrectVariant
+// replaces it) and, if still unset, category from the database.
+// Identified uniques: assumes a baseType line and keeps only entries whose
+// unique.base is that base.
 function findInDatabase (item: ParserState) {
   let info: BaseType[] | undefined
   if (item.category === ItemCategory.DivinationCard) {
@@ -220,6 +344,9 @@ function findInDatabase (item: ParserState) {
   }
 }
 
+// Not part of parseClipboard. Called by the UI after the user picks which
+// unique an unidentified unique is; info becomes the unique and uniqueBase
+// the base parsed earlier. Only dust is recalculated, no other post-step re-runs.
 export function makeIdentifiedUnique (uniqueInfo: BaseType, unidentified: ParsedItem): ParsedItem {
   const newItem: ParsedItem = {
     ...unidentified,
@@ -232,6 +359,9 @@ export function makeIdentifiedUnique (uniqueInfo: BaseType, unidentified: Parsed
   return Object.freeze(newItem)
 }
 
+// Pre-lookup, virtual. Not gated on category (unknown here): any item whose
+// baseType, or name if there is none, ends with " (Tier N)" gets mapTier and
+// loses that suffix, so findInDatabase can find the map base.
 function parseMapTier (item: ParserState) {
   const execResult = _$.MAP_TIER.exec(item.baseType || item.name)
   if (!execResult) return
@@ -262,6 +392,8 @@ function parseAreaPropNested (line: string, item: ParsedItem): boolean {
   return false
 }
 
+// Maps only (category from findInDatabase). Area quantity/atlas drops/rarity/pack size,
+// "more X" props, Map Area and completion reward.
 function parseMap (section: string[], item: ParsedItem) {
   if (item.category !== ItemCategory.Map) return 'PARSER_SKIPPED'
 
@@ -300,12 +432,17 @@ function parseMap (section: string[], item: ParsedItem) {
   return isParsed
 }
 
+// Post-step: needs every parseModifiers call done.
 function parseFractured (item: ParserState) {
   if (item.newMods.some(mod => mod.info.type === ModifierType.Fractured)) {
     item.isFractured = true
   }
 }
 
+// Post-step: replaces the provisional info from findInDatabase and sets
+// uniqueBase for uniques. Variant conditions read armour props, mapTier,
+// statsByType and rawText, so it must run after transformToLegacyModifiers.
+// category is not re-derived: findInDatabase assumes it is the same for every variant.
 function pickCorrectVariant (item: ParserState) {
   item.info = _pickCorrectVariant(item.infoVariants, item) ?? item.infoVariants[0]
   if (item.info.unique) {
@@ -350,6 +487,13 @@ function _pickCorrectVariant (variants: BaseType[], item: ParsedItem): BaseType 
   // i.e. corrupted implicit on Two-Stone Ring
 }
 
+// Stage 2: consumes the first section and creates ParserState.
+// Lines: Item Class (only checked, value discarded), optional Rarity, name,
+// optional baseType. baseType is only there when the item shows two name
+// lines (rare, identified unique, ...); otherwise the base is in name.
+// Sets rarity (the only place it is ever set) and category for Currency,
+// DivinationCard and Gem, which keep rarity undefined. Everything else has
+// category undefined until parseCategoryByHelpText or findInDatabase.
 function parseNamePlate (section: string[]) {
   let line = section.shift()
   if (!line?.startsWith(_$.ITEM_CLASS)) {
@@ -409,6 +553,7 @@ function parseNamePlate (section: string[]) {
   return ok(item)
 }
 
+// Not gated: any section of at most 2 lines with influence names.
 function parseInfluence (section: string[], item: ParsedItem) {
   if (section.length <= 2) {
     const countBefore = item.influences.length
@@ -443,6 +588,9 @@ function parseInfluence (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Not gated. "Corrupted" sets isCorrupted = {}, "Twice Corrupted" sets
+// { twice: true }, "Unmodifiable" sets {} plus isUnmodifiable. isCorrupted
+// stays undefined otherwise, so test it for truthiness.
 function parseCorrupted (section: string[], item: ParsedItem) {
   if (section[0] === _$.CORRUPTED) {
     item.isCorrupted = {}
@@ -458,6 +606,7 @@ function parseCorrupted (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Uniques only (rarity from parseNamePlate).
 function parseFoil (section: string[], item: ParsedItem) {
   if (item.rarity !== ItemRarity.Unique) {
     return 'PARSER_SKIPPED'
@@ -469,6 +618,8 @@ function parseFoil (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Pre-lookup, first parser. Sets isUnidentified, which later parsers and
+// findInDatabase read.
 function parseUnidentified (section: string[], item: ParsedItem) {
   if (section[0] === _$.UNIDENTIFIED) {
     item.isUnidentified = true
@@ -477,6 +628,8 @@ function parseUnidentified (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// First parser after the lookup: reads info.refName (Filled Coffin uses Corpse Level).
+// Consumes the whole section that holds the level line.
 function parseItemLevel (section: string[], item: ParsedItem) {
   let prefix = _$.ITEM_LEVEL
   if (item.info.refName === 'Filled Coffin') {
@@ -492,6 +645,9 @@ function parseItemLevel (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Not gated: takes the "Requirements:" section only if it has a Level line,
+// and sets requiredLevel from it; otherwise the section stays for later
+// parsers.
 function parseRequirements (section: string[], item: ParsedItem) {
   if (section[0] !== _$.REQUIREMENTS) return 'SECTION_SKIPPED'
 
@@ -513,6 +669,9 @@ function parseTalismanTier (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Gems only (category from parseNamePlate). A single-line section naming a
+// gem is the Vaal skill; must run before parseImbuedGem, which also takes
+// single-line gem sections.
 function parseVaalGem (section: string[], item: ParserState) {
   if (item.category !== ItemCategory.Gem) return 'PARSER_SKIPPED'
 
@@ -526,6 +685,7 @@ function parseVaalGem (section: string[], item: ParserState) {
   return 'SECTION_SKIPPED'
 }
 
+// Gems only. The properties section (tags line, then Level) gives gemLevel and quality.
 function parseGem (section: string[], item: ParsedItem) {
   if (item.category !== ItemCategory.Gem) {
     return 'PARSER_SKIPPED'
@@ -541,6 +701,8 @@ function parseGem (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Gems only. A single-line section matching a stat is the imbued support,
+// pushed as an Imbued mod (gems never reach parseModifiers).
 function parseImbuedGem (section: string[], item: ParsedItem) {
   if (item.category !== ItemCategory.Gem) return 'PARSER_SKIPPED'
 
@@ -562,6 +724,7 @@ function parseImbuedGem (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Normal-rarity items plus Currency and DivinationCard (which have no rarity).
 function parseStackSize (section: string[], item: ParsedItem) {
   if (item.rarity !== ItemRarity.Normal &&
       item.category !== ItemCategory.Currency &&
@@ -623,6 +786,7 @@ function parseMemoryStrandsNested (section: string[], item: ParsedItem): boolean
   return false
 }
 
+// Not gated on category: takes any section with an armour/evasion/ES/ward/block line.
 function parseArmour (section: string[], item: ParsedItem) {
   let isParsed: SectionParseResult = 'SECTION_SKIPPED'
 
@@ -657,6 +821,7 @@ function parseArmour (section: string[], item: ParsedItem) {
   return isParsed
 }
 
+// Not gated on category: takes any section with a crit/APS/damage line.
 function parseWeapon (section: string[], item: ParsedItem) {
   let isParsed: SectionParseResult = 'SECTION_SKIPPED'
 
@@ -695,6 +860,7 @@ function parseWeapon (section: string[], item: ParsedItem) {
   return isParsed
 }
 
+// Jewellery and quivers (category from findInDatabase): quality as a pseudo mod, memory strands.
 function parseAccessory (section: string[], item: ParsedItem) {
   if (!JEWELLERY.has(item.category!) && item.category !== ItemCategory.Quiver) return 'PARSER_SKIPPED'
 
@@ -721,6 +887,9 @@ function parseAccessory (section: string[], item: ParsedItem) {
   return isParsed
 }
 
+// Viscera only (info.refName). The one-line slot section ("Head", "Torso",
+// "Upper Limb", "Lower Limb") sets the slot category; the 'Viscera' ITEM
+// entry is not craftable, so findInDatabase left category undefined.
 function parseViscera (section: string[], item: ParsedItem) {
   if (item.info.refName !== 'Viscera') return 'PARSER_SKIPPED'
   if (section.length === 1) {
@@ -739,6 +908,7 @@ function parseViscera (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Expedition Logbook only (info.refName). Listed 3 times, one call per area section.
 function parseLogbookArea (section: string[], item: ParsedItem) {
   if (item.info.refName !== 'Expedition Logbook') return 'PARSER_SKIPPED'
   if (section.length < 3) return 'SECTION_SKIPPED'
@@ -779,6 +949,7 @@ function parseLogbookArea (section: string[], item: ParsedItem) {
   return 'SECTION_PARSED'
 }
 
+// Mercenary Warrant only (info.refName): level (stored as itemLevel) and build.
 function parseMercenary (section: string[], item: ParsedItem) {
   if (item.info.refName !== 'Mercenary Warrant') return 'PARSER_SKIPPED'
 
@@ -802,6 +973,7 @@ function parseMercenary (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Mercenary Warrant only. Listed 6 times, one call per skill section.
 function parseMercenaryGems (section: string[], item: ParsedItem) {
   if (item.info.refName !== 'Mercenary Warrant') return 'PARSER_SKIPPED'
 
@@ -831,6 +1003,16 @@ function parseMercenaryGems (section: string[], item: ParsedItem) {
   return 'SECTION_PARSED'
 }
 
+// Items with a rarity, plus Viscera (info.refName). "Rarity: Currency",
+// divination card and gem items have none and are skipped; "Rarity: Normal"
+// stackables do get here, with no category (their database entries are not
+// craftable).
+// Takes a section with advanced mod lines ("{ ... }") or (enchant)/(scourge)
+// lines. A plain-copy section marked only with " (implicit)", or with no
+// marker, is not taken, so implicit and explicit mods need the advanced
+// copy. Reads item.category to match category-specific stat translations,
+// so it relies on findInDatabase (parseViscera for Viscera) having set it.
+// Pushes to newMods and unknownModifiers.
 function parseModifiers (section: string[], item: ParsedItem) {
   if (
     item.rarity !== ItemRarity.Normal &&
@@ -891,6 +1073,7 @@ function parseSplit (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Flasks only (category from findInDatabase); must run before parseModifiers.
 function parseFlask (section: string[], item: ParsedItem) {
   if (item.category !== ItemCategory.Flask) return 'PARSER_SKIPPED'
 
@@ -949,6 +1132,8 @@ function parseScryingOrb (section: string[], item: ParsedItem) {
   return 'SECTION_SKIPPED'
 }
 
+// Not in `parsers`: parseClipboard calls it on each section before every
+// section parser, mutating the section in place.
 function parseEldritchItem (section: string[]): void {
   // these don't have a dedicated section and are appended to last-ish one,
   // it can be Explicit Mods section, Corrupted, or Mirrored line.
@@ -962,6 +1147,8 @@ function parseEldritchItem (section: string[]): void {
   }
 }
 
+// Pre-lookup. Strips the "Synthesised" prefix from baseType, or from name if
+// there is no baseType line; throws (-> parse_error) if the prefix is missing.
 function parseSynthesised (section: string[], item: ParserState) {
   if (section.length === 1) {
     if (section[0] === _$.SECTION_SYNTHESISED) {
@@ -978,6 +1165,8 @@ function parseSynthesised (section: string[], item: ParserState) {
   return 'SECTION_SKIPPED'
 }
 
+// Pre-lookup, virtual. Needs isUnidentified. Strips "Superior" from name
+// for the rarities whose name line is the base type.
 function parseSuperior (item: ParserState) {
   if (
     (item.rarity === ItemRarity.Normal) ||
@@ -991,6 +1180,8 @@ function parseSuperior (item: ParserState) {
   }
 }
 
+// Pre-lookup, virtual. Identified uniques: strips "Foulborn" from name so
+// the UNIQUE lookup in findInDatabase matches.
 function parseFoulborn (item: ParserState) {
   if (item.rarity !== ItemRarity.Unique || item.isUnidentified) return
 
@@ -1000,6 +1191,7 @@ function parseFoulborn (item: ParserState) {
   }
 }
 
+// Pre-lookup, virtual. Uniques: strips "Vestigial" from baseType so the base lookup matches.
 function parseVestigial (item: ParserState) {
   if (item.rarity !== ItemRarity.Unique || !item.baseType) return
 
@@ -1009,6 +1201,12 @@ function parseVestigial (item: ParserState) {
   }
 }
 
+// Pre-lookup. Besides the rarity line, the only place before the lookup
+// where category is set from item text: CapturedBeast, MetamorphSample,
+// Voidstone from their help text. Must run before normalizeName and
+// findInDatabase, which branch on it. Viscera help text sets no category:
+// it renames the item to 'Viscera', so findInDatabase finds that one ITEM
+// entry whatever the tier and base in the name.
 function parseCategoryByHelpText (section: string[], item: ParserState) {
   if (section[0] === _$.BEAST_HELP) {
     item.category = ItemCategory.CapturedBeast
@@ -1139,6 +1337,8 @@ function parseAreaLevelNested (section: string[], item: ParsedItem): boolean {
   return false
 }
 
+// Chronicle of Atzoatl, Expedition Logbook, Mirrored Tablet, Forbidden Tome
+// (info.refName). Heist items and charts read area level in their own parsers.
 function parseAreaLevel (section: string[], item: ParsedItem) {
   if (
     item.info.refName !== 'Chronicle of Atzoatl' &&
@@ -1278,6 +1478,8 @@ function parseStatsFromMod (lines: string[], item: ParsedItem, modifier: ParsedM
   })))
 }
 
+// Post-step: reads isSynthesised, isCorrupted, isMirrored, rarity and
+// category, so it runs after all section parsers.
 function augmentModifiers (item: ParsedItem) {
   for (const mod of item.newMods) {
     if (item.isSynthesised && mod.info.type === ModifierType.Implicit) {
@@ -1305,6 +1507,7 @@ function transformToLegacyModifiers (item: ParsedItem) {
   item.statsByType = sumStatsByModType(item.newMods)
 }
 
+// Post-step: needs uniqueBase from pickCorrectVariant.
 function calcBasePercentile (item: ParsedItem) {
   const info = item.uniqueBase?.armour ?? item.info.armour
   if (!info) return
@@ -1323,6 +1526,7 @@ function calcBasePercentile (item: ParsedItem) {
   }
 }
 
+// Post-step: needs the final info from pickCorrectVariant; also called by makeIdentifiedUnique.
 function calcDisenchantDust (item: ParsedItem) {
   if (!item.info.unique?.disenchantValue) return
 
