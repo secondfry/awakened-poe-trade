@@ -120,7 +120,6 @@ export default {
   ELDRITCH_MOD_R4: 'Exceptional',
   ELDRITCH_MOD_R5: 'Exquisite',
   ELDRITCH_MOD_R6: 'Perfect',
-  SENTINEL_CHARGE: 'Charge: ',
   SHAPER_MODS: ["of Shaping","The Shaper's","Elevated Shaper's","of Elevated Shaping"],
   ELDER_MODS: ["of the Elder","The Elder's","Elevated Elder's","of the Elevated Elder"],
   CRUSADER_MODS: ["Crusader's","of the Crusade","Elevated Crusader's","of the Elevated Crusade"],

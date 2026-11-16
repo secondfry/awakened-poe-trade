@@ -11,8 +11,6 @@
         :filter="{ disabled: false }" :text="t('item.map_foil_reward', [filters.mapCompletionReward.name])" />
       <filter-btn-numeric v-if="filters.areaLevel"
         :filter="filters.areaLevel" :name="t('item.area_level')" />
-      <filter-btn-numeric v-if="filters.sentinelCharge"
-        :filter="filters.sentinelCharge" :name="t('item.sentinel_charge')" />
       <filter-btn-numeric v-if="filters.requiredLevel"
         :filter="filters.requiredLevel" :name="t('item.required_level')" />
       <filter-btn-numeric v-if="filters.itemLevel"
@@ -146,7 +144,6 @@ export default defineComponent({
 
     const showUnknownMods = computed(() =>
       props.item.unknownModifiers.length &&
-      props.item.category !== ItemCategory.Sentinel &&
       props.item.category !== ItemCategory.Map
     )
 

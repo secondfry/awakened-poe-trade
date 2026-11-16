@@ -120,7 +120,6 @@ export default {
   ELDRITCH_MOD_R4: '특출난',
   ELDRITCH_MOD_R5: '정교한',
   ELDRITCH_MOD_R6: '완벽한',
-  SENTINEL_CHARGE: '충전: ',
   SHAPER_MODS: ["- 형성","쉐이퍼의","고양된 쉐이퍼의","- 고양된 형성"],
   ELDER_MODS: ["- 엘더","엘더의","고양된 엘더의","- 고양된 엘더"],
   CRUSADER_MODS: ["십자군의","- 십자군","고양된 십자군의","- 고양된 십자군"],

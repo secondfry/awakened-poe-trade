@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, PropType, shallowRef, watch, computed, nextTick, provide } from 'vue'
-import { Result, ok, err } from 'neverthrow'
+import { Result, ok } from 'neverthrow'
 import { useI18n } from 'vue-i18n'
 import UiErrorBox from '@/web/ui/UiErrorBox.vue'
 import UiPopover from '@/web/ui/Popover.vue'
@@ -78,7 +78,7 @@ import { MainProcess, Host } from '@/web/background/IPC'
 import { usePoeninja } from '../background/Prices'
 import { useLeagues } from '@/web/background/Leagues'
 import { AppConfig } from '@/web/Config'
-import { ItemCategory, ItemRarity, parseClipboard, ParsedItem } from '@/parser'
+import { parseClipboard, ParsedItem } from '@/parser'
 import RelatedItems from './related-items/RelatedItems.vue'
 import RateLimiterState from './trade/RateLimiterState.vue'
 import UnidentifiedResolver from './unidentified-resolver/UnidentifiedResolver.vue'
@@ -182,10 +182,6 @@ export default defineComponent({
       advancedCheck.value = e.focusOverlay
 
       item.value = (e.item ? ok(e.item as ParsedItem) : parseClipboard(e.clipboard))
-        .andThen(item => (
-          (item.category === ItemCategory.Sentinel && item.rarity !== ItemRarity.Unique))
-          ? err('item.unknown')
-          : ok(item))
         .mapErr(err => ({
           name: `${err}`,
           message: `${err}_help`,

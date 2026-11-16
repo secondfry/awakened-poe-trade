@@ -43,11 +43,9 @@ export enum ItemCategory {
   Currency = 'Currency',
   DivinationCard = 'Divination Card',
   Voidstone = 'Voidstone',
-  Sentinel = 'Sentinel',
   MemoryLine = 'Memory Line',
   SanctumRelic = 'Sanctum Relic',
   Tincture = 'Tincture',
-  Charm = 'Charm',
   Idol = 'Idol',
   Graft = 'Graft',
   Chart = 'Chart',
@@ -113,8 +111,7 @@ export const MAGIC_ONLY_OR_UNIQUE_ITEM = new Set([
   ItemCategory.Flask,
   ItemCategory.Tincture,
   ItemCategory.Voidstone,
-  ItemCategory.SanctumRelic,
-  ItemCategory.Charm
+  ItemCategory.SanctumRelic
 ])
 
 export const CONSUMABLE_CRAFTABLE_ITEM = new Set([

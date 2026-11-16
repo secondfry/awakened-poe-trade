@@ -80,7 +80,6 @@ export interface ParsedItem {
   isMirrored?: boolean
   isSplit?: boolean
   influences: ItemInfluence[]
-  sentinelCharge?: number
   isSynthesised?: boolean
   isFractured?: boolean
   isVeiled?: boolean

@@ -243,7 +243,6 @@ export function createFilters (
         disabled = true
       } else if (
         item.category === ItemCategory.SanctumRelic ||
-        item.category === ItemCategory.Charm ||
         item.category === ItemCategory.HeistContract
       ) {
         disabled = false
@@ -252,13 +251,6 @@ export function createFilters (
         category: item.category,
         disabled: disabled
       }
-    }
-  }
-
-  if (item.sentinelCharge != null) {
-    filters.sentinelCharge = {
-      value: item.sentinelCharge,
-      disabled: false
     }
   }
 
@@ -369,7 +361,6 @@ export function createFilters (
       item.category !== ItemCategory.Chart &&
       item.category !== ItemCategory.MemoryLine &&
       item.category !== ItemCategory.SanctumRelic &&
-      item.category !== ItemCategory.Charm &&
       item.category !== ItemCategory.Idol &&
       item.info.refName !== 'Expedition Logbook'
     ) {

@@ -50,8 +50,7 @@ export function createExactStatFilters (
     item.category !== ItemCategory.Map &&
     item.category !== ItemCategory.HeistContract &&
     item.category !== ItemCategory.HeistBlueprint &&
-    item.category !== ItemCategory.Chart &&
-    item.category !== ItemCategory.Sentinel
+    item.category !== ItemCategory.Chart
   )) {
     keepByType.push(ModifierType.Explicit)
   } else if (item.rarity === ItemRarity.Rare && item.category === ItemCategory.Idol) {
@@ -126,8 +125,7 @@ export function createExactStatFilters (
     applyFlaskHybridMod(ctx)
   } else if (
     item.category === ItemCategory.MemoryLine ||
-    item.category === ItemCategory.SanctumRelic ||
-    item.category === ItemCategory.Charm
+    item.category === ItemCategory.SanctumRelic
   ) {
     enableAllFilters(ctx.filters)
   } else if (item.category === ItemCategory.Idol) {

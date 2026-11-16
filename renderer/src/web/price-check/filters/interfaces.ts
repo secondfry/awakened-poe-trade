@@ -86,7 +86,6 @@ export interface ItemFilters {
     disabled: boolean
   }
   areaLevel?: FilterNumeric
-  sentinelCharge?: FilterNumeric
   trade: {
     offline: boolean
     onlineInLeague: boolean

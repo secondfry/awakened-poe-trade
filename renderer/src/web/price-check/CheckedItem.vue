@@ -140,7 +140,6 @@ export default defineComponent({
           (item.category === ItemCategory.HeistContract) ||
           (item.category === ItemCategory.HeistBlueprint) ||
           (item.category === ItemCategory.SanctumRelic) ||
-          (item.category === ItemCategory.Charm) ||
           (item.category === ItemCategory.Idol) ||
           (item.info.refName === 'Viscera') ||
           (!CATEGORY_TO_TRADE_ID.has(item.category!) &&

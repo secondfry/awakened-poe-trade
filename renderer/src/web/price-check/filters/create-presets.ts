@@ -43,14 +43,12 @@ export function createPresets (
     (item.category === ItemCategory.Tincture && item.rarity !== ItemRarity.Unique) ||
     (item.category === ItemCategory.SanctumRelic && item.rarity !== ItemRarity.Unique) ||
     (item.category === ItemCategory.Idol && item.rarity !== ItemRarity.Unique) ||
-    item.category === ItemCategory.Charm ||
     item.category === ItemCategory.Map ||
     item.category === ItemCategory.MemoryLine ||
     item.category === ItemCategory.Invitation ||
     item.category === ItemCategory.HeistContract ||
     item.category === ItemCategory.HeistBlueprint ||
-    item.category === ItemCategory.Chart ||
-    item.category === ItemCategory.Sentinel
+    item.category === ItemCategory.Chart
   ) {
     if (item.rarity !== ItemRarity.Unique && (
       (item.category === ItemCategory.Map && !item.mapCompletionReward) ||

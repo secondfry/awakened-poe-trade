@@ -49,7 +49,6 @@ export const CATEGORY_TO_TRADE_ID = new Map([
   [ItemCategory.Trinket, 'accessory.trinket'],
   [ItemCategory.SanctumRelic, 'sanctum.relic'],
   [ItemCategory.Tincture, 'tincture'],
-  [ItemCategory.Charm, 'azmeri.charm'],
   [ItemCategory.Idol, 'idol'],
   [ItemCategory.Graft, 'graft'],
   [ItemCategory.Chart, 'chart'],
@@ -146,7 +145,7 @@ interface TradeRequest {
           identified?: FilterBoolean
           stack_size?: FilterRange
           memory_level?: FilterRange
-          foulborn_item?: FilterBoolean
+          mutated?: FilterBoolean // "Foulborn" on the trade site
           vestigial?: FilterBoolean
         }
       }
@@ -196,11 +195,6 @@ interface TradeRequest {
           heist_lockpicking?: FilterRange
           heist_perception?: FilterRange
           heist_trap_disarmament?: FilterRange
-        }
-      }
-      sentinel_filters?: {
-        filters: {
-          sentinel_durability?: FilterRange
         }
       }
       trade_filters?: {
@@ -356,7 +350,7 @@ export function createTradeRequest (filters: ItemFilters, stats: FilterOrGroup[]
     propSet(query.filters, 'misc_filters.filters.split.option', String(false))
   }
   if (filters.foulborn?.value === false) {
-    propSet(query.filters, 'misc_filters.filters.foulborn_item.option', String(false))
+    propSet(query.filters, 'misc_filters.filters.mutated.option', String(false))
   }
   if (filters.vestigial?.value === false) {
     propSet(query.filters, 'misc_filters.filters.vestigial.option', String(false))
@@ -429,10 +423,6 @@ export function createTradeRequest (filters: ItemFilters, stats: FilterOrGroup[]
     if (filters.areaLevel.max) {
       propSet(query.filters, 'map_filters.filters.area_level.max', filters.areaLevel.max)
     }
-  }
-
-  if (filters.sentinelCharge && !filters.sentinelCharge.disabled) {
-    propSet(query.filters, 'sentinel_filters.filters.sentinel_durability.min', filters.sentinelCharge.value)
   }
 
   for (const stat of stats) {
