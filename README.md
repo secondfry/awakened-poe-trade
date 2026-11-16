@@ -3,6 +3,7 @@
 Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-trade):
 
 - Required level filter on gear price checks.
+- Recognizes affixes reworded in 3.30 Covens of Umbra, including map, area and atlas mods.
 
 ---
 
