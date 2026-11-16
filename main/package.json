@@ -1,6 +1,6 @@
 {
-  "name": "awakened-poe-trade",
-  "version": "3.30.102",
+  "name": "secondfry-poe-trade",
+  "version": "3.30.103",
   "private": true,
   "scripts": {
     "dev": "node build/script.mjs",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SnosMe/awakened-poe-trade.git"
+    "url": "https://github.com/secondfry/awakened-poe-trade.git"
   },
   "main": "dist/main.js",
   "dependencies": {
