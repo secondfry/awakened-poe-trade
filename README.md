@@ -6,6 +6,7 @@ Features this fork has over [upstream](https://github.com/SnosMe/awakened-poe-tr
 - Required level filter on gear price checks.
 - Viscera implicits that share their text with a gear stat (fortification, spell suppression, pierce) are searched by trade's Viscera stat id, so they find Viscera.
 - Foulborn searches use the trade site's current filter; removed Charm and Sentinel filters dropped.
+- Damage-taken penalties, such as "#% increased ... Damage taken" and "+# ... Damage taken", search as lower-is-better, so a price check matches rolls at least as good as yours.
 
 ---
 

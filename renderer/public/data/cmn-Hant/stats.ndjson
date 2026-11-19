@@ -20,7 +20,7 @@
 {"ref":"# Maximum Void Charges","better":1,"matchers":[{"string":"# 最大虛空能量球數量"}],"trade":{"ids":{"explicit":["explicit.stat_1209237645"]}}}
 {"ref":"# Modifiers","better":1,"matchers":[{"string":"# 詞綴 "}],"trade":{"ids":{"pseudo":["pseudo.pseudo_number_of_affix_mods"]}}}
 {"ref":"# Notable Passive Skills","better":1,"matchers":[{"string":"# 強力天賦 "}],"trade":{"ids":{"pseudo":["pseudo.pseudo_number_of_notable_passive_skills"]}}}
-{"ref":"# Physical Damage taken on Minion Death","better":1,"matchers":[{"string":"當你的召喚物死亡時承受 # 點物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_4176970656"]}}}
+{"ref":"# Physical Damage taken on Minion Death","better":-1,"matchers":[{"string":"當你的召喚物死亡時承受 # 點物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_4176970656"]}}}
 {"ref":"# Prefix Modifier cannot be changed","better":1,"matchers":[{"string":"#條前綴詞綴無法被變更"}],"trade":{"ids":{"explicit":["explicit.stat_181387736"],"crafted":["crafted.stat_181387736"]}}}
 {"ref":"# Prefix Modifiers","better":1,"matchers":[{"string":"# 前綴 "}],"trade":{"ids":{"pseudo":["pseudo.pseudo_number_of_prefix_mods"]}}}
 {"ref":"# Strength per 1 Strength on Allocated Passives in Radius","better":1,"matchers":[{"string":"範圍內每 1 點配置力量為 # 力量"}],"trade":{"ids":{"explicit":["explicit.stat_552705983"]}}}
@@ -624,7 +624,7 @@
 {"ref":"#% increased Burning Damage","better":1,"matchers":[{"string":"增加 #% 燃燒傷害"},{"string":"減少 #% 燃燒傷害","negate":true}],"trade":{"ids":{"pseudo":["pseudo.pseudo_increased_burning_damage"],"explicit":["explicit.stat_1175385867"],"implicit":["implicit.stat_1175385867"],"fractured":["fractured.stat_1175385867"]}}}
 {"ref":"#% increased Burning Damage for each time you have Shocked a Non-Shocked Enemy Recently, up to a maximum of 120%","better":1,"matchers":[{"string":"近期每次你感電未被感電的敵人，增加 #% 燃燒傷害，最多 120%"},{"string":"近期每次你感電未被感電的敵人，減少 #% 燃燒傷害，最多 120%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3285748758"]}}}
 {"ref":"#% increased Burning Damage if you've Ignited an Enemy Recently","better":1,"matchers":[{"string":"近期你若有點燃敵人，短時間内增加 #% 燃燒傷害"},{"string":"近期你若有點燃敵人，短時間内減少 #% 燃燒傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3919557483"]}}}
-{"ref":"#% increased Burning Damage taken","better":1,"matchers":[{"string":"增加 #% 承受的燃燒傷害"},{"string":"減少 #% 承受的燃燒傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_928477193"]}}}
+{"ref":"#% increased Burning Damage taken","better":-1,"matchers":[{"string":"增加 #% 承受的燃燒傷害"},{"string":"減少 #% 承受的燃燒傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_928477193"]}}}
 {"ref":"#% increased Cast Speed","better":1,"matchers":[{"string":"增加 #% 施放速度"},{"string":"減少 #% 施放速度","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2891184298"],"implicit":["implicit.stat_2891184298"],"fractured":["fractured.stat_2891184298"],"enchant":["enchant.stat_2891184298"],"crafted":["crafted.stat_2891184298"]}}}
 {"ref":"#% increased Cast Speed during any Flask Effect","better":1,"matchers":[{"string":"在任何藥劑效果持續時間內，增加 #% 施放速度"},{"string":"在任何藥劑效果持續時間內，減少 #% 施放速度","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_252194507"],"implicit":["implicit.stat_252194507"],"fractured":["fractured.stat_252194507"]}}}
 {"ref":"#% increased Cast Speed during Effect","better":1,"matchers":[{"string":"效果持續時間內，增加 #% 施放速度"},{"string":"效果持續時間內，減少 #% 施放速度","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3256116097"],"fractured":["fractured.stat_3256116097"]}}}
@@ -785,16 +785,16 @@
 {"ref":"#% increased Damage per Moon Rite completed","better":1,"matchers":[{"string":"每完成一場祭月增加 #% 傷害"},{"string":"每完成一場祭月減少 #% 傷害","negate":true}],"trade":{"ids":{"enchant":["enchant.stat_622110632"]}}}
 {"ref":"#% increased Damage per Power Charge","better":1,"matchers":[{"string":"每顆暴擊球增加 #% 傷害"},{"string":"每顆暴擊球減少 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2034658008"],"implicit":["implicit.stat_2034658008"],"fractured":["fractured.stat_2034658008"],"crafted":["crafted.stat_2034658008"]}}}
 {"ref":"#% increased Damage per Raised Zombie","better":1,"matchers":[{"string":"每隻殭屍復甦增加 #% 傷害"},{"string":"每隻殭屍復甦減少 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3868443508"]}}}
-{"ref":"#% increased Damage taken","better":1,"matchers":[{"string":"增加 #% 承受傷害"},{"string":"減少 #% 承受傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3691641145"]}}}
-{"ref":"#% increased Damage taken from Ghosts","better":1,"matchers":[{"string":"遭受鬼魂的傷害增加 #%"},{"string":"遭受鬼魂的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2156764291"]}}}
-{"ref":"#% increased Damage taken from Skeletons","better":1,"matchers":[{"string":"遭受骷髏的傷害增加 #%"},{"string":"遭受骷髏的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_705686721"]}}}
-{"ref":"#% increased Damage taken if you've been Frozen Recently","better":1,"matchers":[{"string":"若你近期被冰凍，增加承受 #% 傷害"},{"string":"若你近期被冰凍，減少承受 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3616645755"]}}}
-{"ref":"#% increased Damage taken per 250 Dexterity","better":1,"matchers":[{"string":"每 250 點敏捷，增加 #% 承受傷害"},{"string":"每 250 點敏捷，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_2477636501"]}}}
-{"ref":"#% increased Damage taken per 250 Intelligence","better":1,"matchers":[{"string":"每 250 點智慧，增加 #% 承受傷害"},{"string":"每 250 點智慧，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_3522931817"]}}}
-{"ref":"#% increased Damage taken per 250 Strength","better":1,"matchers":[{"string":"每 250 點力量，增加 #% 承受傷害"},{"string":"每 250 點力量，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_1443108510"]}}}
-{"ref":"#% increased Damage taken per Frenzy Charge","better":1,"matchers":[{"string":"承受每個狂怒球的傷害增加 #%"},{"string":"承受每個狂怒球的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1625103793"]}}}
-{"ref":"#% increased Damage taken while on Full Energy Shield","better":1,"matchers":[{"string":"能量護盾全滿時增加 #% 受到的傷害"},{"string":"能量護盾全滿時減少 #% 受到的傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_969865219"]}}}
-{"ref":"#% increased Damage taken while Phasing","better":1,"matchers":[{"string":"迷蹤時，增加 #% 承受傷害"},{"string":"迷蹤時，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_146268648"]}}}
+{"ref":"#% increased Damage taken","better":-1,"matchers":[{"string":"增加 #% 承受傷害"},{"string":"減少 #% 承受傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3691641145"]}}}
+{"ref":"#% increased Damage taken from Ghosts","better":-1,"matchers":[{"string":"遭受鬼魂的傷害增加 #%"},{"string":"遭受鬼魂的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2156764291"]}}}
+{"ref":"#% increased Damage taken from Skeletons","better":-1,"matchers":[{"string":"遭受骷髏的傷害增加 #%"},{"string":"遭受骷髏的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_705686721"]}}}
+{"ref":"#% increased Damage taken if you've been Frozen Recently","better":-1,"matchers":[{"string":"若你近期被冰凍，增加承受 #% 傷害"},{"string":"若你近期被冰凍，減少承受 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3616645755"]}}}
+{"ref":"#% increased Damage taken per 250 Dexterity","better":-1,"matchers":[{"string":"每 250 點敏捷，增加 #% 承受傷害"},{"string":"每 250 點敏捷，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_2477636501"]}}}
+{"ref":"#% increased Damage taken per 250 Intelligence","better":-1,"matchers":[{"string":"每 250 點智慧，增加 #% 承受傷害"},{"string":"每 250 點智慧，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_3522931817"]}}}
+{"ref":"#% increased Damage taken per 250 Strength","better":-1,"matchers":[{"string":"每 250 點力量，增加 #% 承受傷害"},{"string":"每 250 點力量，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_1443108510"]}}}
+{"ref":"#% increased Damage taken per Frenzy Charge","better":-1,"matchers":[{"string":"承受每個狂怒球的傷害增加 #%"},{"string":"承受每個狂怒球的傷害減少 #%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1625103793"]}}}
+{"ref":"#% increased Damage taken while on Full Energy Shield","better":-1,"matchers":[{"string":"能量護盾全滿時增加 #% 受到的傷害"},{"string":"能量護盾全滿時減少 #% 受到的傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_969865219"]}}}
+{"ref":"#% increased Damage taken while Phasing","better":-1,"matchers":[{"string":"迷蹤時，增加 #% 承受傷害"},{"string":"迷蹤時，減少 #% 承受傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_146268648"]}}}
 {"ref":"#% increased Damage when on Low Life","better":1,"matchers":[{"string":"貧血時增加 #% 傷害"},{"string":"貧血時減少 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1513447578"]}}}
 {"ref":"#% increased Damage while area is not in Lockdown\nPlayers deal #% increased Damage while area is not in Lockdown","better":1,"matchers":[{"string":"區域沒有被封鎖時，增加 #% 傷害\n玩家在區域沒有被封鎖時，增加 #% 傷害"},{"string":"區域沒有被封鎖時，減少 #% 傷害\n玩家在區域沒有被封鎖時，減少 #% 傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1312481589"],"fractured":["fractured.stat_1312481589"]}}}
 {"ref":"#% increased Damage while Bleeding","better":1,"matchers":[{"string":"流血時增加#%傷害"},{"string":"流血時減少#%傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_546701346"]}}}
@@ -1021,7 +1021,7 @@
 {"ref":"#% increased Fire Damage per 1% Fire Resistance above 75%","better":1,"matchers":[{"string":"每 1% 超過 75% 的火焰抗性，增加 #% 火焰傷害"},{"string":"每 1% 超過 75% 的火焰抗性，減少 #% 火焰傷害","negate":true}],"trade":{"ids":{"enchant":["enchant.stat_3013187834"]}}}
 {"ref":"#% increased Fire Damage per 1% Missing Fire Resistance, up to a maximum of 300%","better":1,"matchers":[{"string":"每失去 1% 火焰抗性，增加 #% 火焰傷害，最高 300%"},{"string":"每失去 1% 火焰抗性，減少 #% 火焰傷害，最高 300%","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1060236362"]}}}
 {"ref":"#% increased Fire Damage per 20 Strength","better":1,"matchers":[{"string":"每 20 點力量增加 #% 火焰傷害"},{"string":"每 20 點力量減少 #% 火焰傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2241902512"],"implicit":["implicit.stat_2241902512"]}}}
-{"ref":"#% increased Fire Damage taken","better":1,"matchers":[{"string":"增加 #% 承受的火焰傷害"},{"string":"減少 #% 承受的火焰傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3743301799"],"implicit":["implicit.stat_3743301799"],"fractured":["fractured.stat_3743301799"]}}}
+{"ref":"#% increased Fire Damage taken","better":-1,"matchers":[{"string":"增加 #% 承受的火焰傷害"},{"string":"減少 #% 承受的火焰傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3743301799"],"implicit":["implicit.stat_3743301799"],"fractured":["fractured.stat_3743301799"]}}}
 {"ref":"#% increased Fire Damage while affected by Anger","better":1,"matchers":[{"string":"被憤怒影響時增加 #% 火焰傷害"},{"string":"被憤怒影響時減少 #% 火焰傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3337107517"]}}}
 {"ref":"#% increased Fire Damage while affected by Herald of Ash","better":1,"matchers":[{"string":"被灰燼之捷影響時，增加 #% 火焰傷害"},{"string":"被灰燼之捷影響時，減少 #% 火焰傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2775776604"]}}}
 {"ref":"#% increased Fire Damage with Attack Skills","better":1,"matchers":[{"string":"攻擊技能增加 #% 火焰傷害"},{"string":"攻擊技能減少 #% 火焰傷害","negate":true}],"trade":{"ids":{"pseudo":["pseudo.pseudo_increased_fire_damage_with_attack_skills"],"implicit":["implicit.stat_2468413380"]}}}
@@ -1352,7 +1352,7 @@
 {"ref":"#% increased Spell Damage per 500 Maximum Mana","better":1,"matchers":[{"string":"每 500 最大魔力增加 #% 法術傷害"},{"string":"每 500 最大魔力減少 #% 法術傷害","negate":true}],"trade":{"ids":{"implicit":["implicit.stat_3555662994"]}}}
 {"ref":"#% increased Spell Damage per Power Charge","better":1,"matchers":[{"string":"每個暴擊球增加 #% 法術傷害"}],"trade":{"ids":{"explicit":["explicit.stat_827329571"],"implicit":["implicit.stat_827329571"]}}}
 {"ref":"#% increased Spell Damage per Summoned Skeleton","better":1,"matchers":[{"string":"每1召喚骷髏，增加#%法術傷害"},{"string":"每1召喚骷髏，減少#%法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2001753918"]}}}
-{"ref":"#% increased Spell Damage taken when on Low Mana","better":1,"matchers":[{"string":"貧魔時增加 #% 承受的法術傷害"},{"string":"貧魔時減少 #% 承受的法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3557561376"]}}}
+{"ref":"#% increased Spell Damage taken when on Low Mana","better":-1,"matchers":[{"string":"貧魔時增加 #% 承受的法術傷害"},{"string":"貧魔時減少 #% 承受的法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3557561376"]}}}
 {"ref":"#% increased Spell Damage while Dual Wielding","better":1,"matchers":[{"string":"雙持時增加 #% 法術傷害"},{"string":"雙持時減少 #% 法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1678690824"],"implicit":["implicit.stat_1678690824"],"fractured":["fractured.stat_1678690824"]}}}
 {"ref":"#% increased Spell Damage while holding a Shield","better":1,"matchers":[{"string":"持盾時增加 #% 法術傷害"},{"string":"持盾時減少 #% 法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1766142294"],"implicit":["implicit.stat_1766142294"],"fractured":["fractured.stat_1766142294"]}}}
 {"ref":"#% increased Spell Damage while no Mana is Reserved","better":1,"matchers":[{"string":"無魔力保留時增加 #% 法術傷害"},{"string":"無魔力保留時增減少 #% 法術傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3779823630"]}}}
@@ -1424,7 +1424,7 @@
 {"ref":"#% more Duration","better":1,"matchers":[{"string":"#% 更多持續時間"},{"string":"#% 更少持續時間","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_1506355899"],"fractured":["fractured.stat_1506355899"]}}}
 {"ref":"#% more Duration of Ignites you inflict","better":1,"matchers":[{"string":"你施加的點燃有#%更多持續時間"},{"string":"你施加的點燃有#%更少持續時間","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3775619537"]}}}
 {"ref":"#% more Effect of your Curses","better":1,"matchers":[{"string":"你的詛咒有 #% 更多效果"},{"string":"你的詛咒有 #% 更少效果","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_4106109768"]}}}
-{"ref":"#% more Elemental Damage taken per Raised Zombie","better":1,"matchers":[{"string":"每隻殭屍復甦承受 #% 更多元素傷害"},{"string":"每隻殭屍復甦承受 #% 更少元素傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_512740886"]}}}
+{"ref":"#% more Elemental Damage taken per Raised Zombie","better":-1,"matchers":[{"string":"每隻殭屍復甦承受 #% 更多元素傷害"},{"string":"每隻殭屍復甦承受 #% 更少元素傷害","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_512740886"]}}}
 {"ref":"#% more Energy Shield Recharge Rate","better":1,"matchers":[{"string":"#% 更多能量護盾充能率"},{"string":"#% 更少能量護盾充能率","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3432301333"]}}}
 {"resolve":{"strat":"trivial-merge"},"stats":[{"ref":"#% more Flask Charges gained from Kills","better":1,"matchers":[{"string":"擊殺時獲得 #% 更多藥劑充能"},{"string":"擊殺時獲得 #% 更少藥劑充能","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_624257168"]}}},{"ref":"#% more Flask Charges gained from Kills","better":1,"matchers":[{"string":"擊殺時獲得 #% 更多藥劑充能"},{"string":"擊殺時獲得 #% 更少藥劑充能","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_3790386828"]}}}]}
 {"ref":"#% more Ignite Duration","better":1,"matchers":[{"string":"#% 更多點燃持續時間"},{"string":"#% 更少點燃持續時間","negate":true}],"trade":{"ids":{"explicit":["explicit.stat_2614885550"]}}}
@@ -1670,15 +1670,15 @@
 {"ref":"+# Armour per Summoned Totem","better":1,"matchers":[{"string":"每個召喚的圖騰 # 護甲"}],"trade":{"ids":{"explicit":["explicit.stat_1429385513"],"implicit":["implicit.stat_1429385513"]}}}
 {"ref":"+# Armour while stationary","better":1,"matchers":[{"string":"站立時 # 護甲值"}],"trade":{"ids":{"explicit":["explicit.stat_2551779822"],"implicit":["implicit.stat_2551779822"]}}}
 {"ref":"+# Armour while you do not have Avatar of Fire","better":1,"matchers":[{"string":"當你沒有火之化身時 # 護甲"}],"trade":{"ids":{"explicit":["explicit.stat_4078952782"]}}}
-{"ref":"+# Chaos Damage taken","better":1,"matchers":[{"string":"# 承受的混沌傷害"}],"trade":{"ids":{"explicit":["explicit.stat_496011033"],"implicit":["implicit.stat_496011033"]}}}
-{"ref":"+# Cold Damage taken from Hits","better":1,"matchers":[{"string":"被擊中時 # 承受冰冷傷害"}],"trade":{"ids":{"implicit":["implicit.stat_261654754"]}}}
+{"ref":"+# Chaos Damage taken","better":-1,"matchers":[{"string":"# 承受的混沌傷害"}],"trade":{"ids":{"explicit":["explicit.stat_496011033"],"implicit":["implicit.stat_496011033"]}}}
+{"ref":"+# Cold Damage taken from Hits","better":-1,"matchers":[{"string":"被擊中時 # 承受冰冷傷害"}],"trade":{"ids":{"implicit":["implicit.stat_261654754"]}}}
 {"ref":"+# Dexterity Requirement","better":1,"matchers":[{"string":"# 敏捷需求"}],"trade":{"ids":{"explicit":["explicit.stat_1133453872"]}}}
 {"ref":"+# Energy Shield gained on Killing a Shocked Enemy","better":1,"matchers":[{"string":"擊殺每個感電的敵人回復 # 點能量護盾"}],"trade":{"ids":{"explicit":["explicit.stat_347328113"]}}}
-{"ref":"+# Fire Damage taken from Hits","better":1,"matchers":[{"string":"被擊中時承受 # 火焰傷害"}],"trade":{"ids":{"explicit":["explicit.stat_614758785"],"implicit":["implicit.stat_614758785"]}}}
-{"ref":"+# Fire Damage taken from Hits per Mana Burn","better":1,"matchers":[{"string":"每層魔力灼燒使被擊中時承受 # 火焰傷害"}],"trade":{"ids":{"explicit":["explicit.stat_1483305963"]}}}
+{"ref":"+# Fire Damage taken from Hits","better":-1,"matchers":[{"string":"被擊中時承受 # 火焰傷害"}],"trade":{"ids":{"explicit":["explicit.stat_614758785"],"implicit":["implicit.stat_614758785"]}}}
+{"ref":"+# Fire Damage taken from Hits per Mana Burn","better":-1,"matchers":[{"string":"每層魔力灼燒使被擊中時承受 # 火焰傷害"}],"trade":{"ids":{"explicit":["explicit.stat_1483305963"]}}}
 {"ref":"+# Intelligence Requirement","better":1,"matchers":[{"string":"# 智慧需求"}],"trade":{"ids":{"explicit":["explicit.stat_2153364323"]}}}
 {"ref":"+# Life per 4 Dexterity","better":1,"matchers":[{"string":"每 4 點敏捷 # 生命"}],"trade":{"ids":{"explicit":["explicit.stat_2042405614"]}}}
-{"ref":"+# Lightning Damage taken from Hits","better":1,"matchers":[{"string":"被擊中時 # 承受閃電傷害"}],"trade":{"ids":{"implicit":["implicit.stat_465051235"]}}}
+{"ref":"+# Lightning Damage taken from Hits","better":-1,"matchers":[{"string":"被擊中時 # 承受閃電傷害"}],"trade":{"ids":{"implicit":["implicit.stat_465051235"]}}}
 {"ref":"+# Mana gained on Killing a Frozen Enemy","better":1,"matchers":[{"string":"擊殺一個冰凍敵人 # 魔力"}],"trade":{"ids":{"explicit":["explicit.stat_3304801725"]}}}
 {"ref":"+# Mana per 4 Strength","better":1,"matchers":[{"string":"每 4 點力量 # 魔力"}],"trade":{"ids":{"explicit":["explicit.stat_507075051"]}}}
 {"ref":"+# maximum Energy Shield per 5 Strength","better":1,"matchers":[{"string":"每 5 力量增加 # 最大能量護盾"}],"trade":{"ids":{"explicit":["explicit.stat_3788706881"]}}}
@@ -1691,10 +1691,10 @@
 {"ref":"+# metre to Weapon Range per 10% Quality","better":1,"matchers":[{"string":"每 10% 品質 # 米武器距離"}],"trade":{"ids":{"enchant":["enchant.stat_2967267655"]}}}
 {"ref":"+# metres to Melee Strike Range","better":1,"fromAreaMods":"yes","matchers":[{"string":"# 米近戰打擊距離"}],"trade":{"ids":{"explicit":["explicit.stat_2264295449"],"implicit":["implicit.stat_2264295449"],"fractured":["fractured.stat_2264295449"],"crafted":["crafted.stat_2264295449"]}}}
 {"ref":"+# metres to Weapon Range","better":1,"matchers":[{"string":"# 米武器距離"}],"trade":{"ids":{"explicit":["explicit.stat_350598685"],"implicit":["implicit.stat_350598685"],"fractured":["fractured.stat_350598685"],"enchant":["enchant.stat_350598685"],"crafted":["crafted.stat_350598685"]}}}
-{"ref":"+# Physical Damage taken from Attack Hits","better":1,"matchers":[{"string":"攻擊擊中 # 承受物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3441651621"],"implicit":["implicit.stat_3441651621"],"fractured":["fractured.stat_3441651621"]}}}
-{"ref":"+# Physical Damage taken from Hits by Animals","better":1,"matchers":[{"string":"被動物擊中時承受 # 物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3277537093"],"implicit":["implicit.stat_3277537093"]}}}
-{"ref":"+# Physical Damage taken from Hits per Level","better":1,"matchers":[{"string":"每等級擊中 # 承受物理傷害"}],"trade":{"ids":{"implicit":["implicit.stat_3652380199"]}}}
-{"ref":"+# Physical Damage taken from Projectile Attacks","better":1,"matchers":[{"string":"# 承受的投射物攻擊的物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3612407781"],"implicit":["implicit.stat_3612407781"]}}}
+{"ref":"+# Physical Damage taken from Attack Hits","better":-1,"matchers":[{"string":"攻擊擊中 # 承受物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3441651621"],"implicit":["implicit.stat_3441651621"],"fractured":["fractured.stat_3441651621"]}}}
+{"ref":"+# Physical Damage taken from Hits by Animals","better":-1,"matchers":[{"string":"被動物擊中時承受 # 物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3277537093"],"implicit":["implicit.stat_3277537093"]}}}
+{"ref":"+# Physical Damage taken from Hits per Level","better":-1,"matchers":[{"string":"每等級擊中 # 承受物理傷害"}],"trade":{"ids":{"implicit":["implicit.stat_3652380199"]}}}
+{"ref":"+# Physical Damage taken from Projectile Attacks","better":-1,"matchers":[{"string":"# 承受的投射物攻擊的物理傷害"}],"trade":{"ids":{"explicit":["explicit.stat_3612407781"],"implicit":["implicit.stat_3612407781"]}}}
 {"ref":"+# Prefix Modifier allowed","better":1,"matchers":[{"string":"允許前綴 #"}],"trade":{"ids":{"implicit":["implicit.stat_3182714256"]}}}
 {"ref":"+# second to Summon Skeleton Cooldown","better":1,"matchers":[{"string":"# 秒召喚骷髏冷卻時間"}],"trade":{"ids":{"explicit":["explicit.stat_3013430129"]}}}
 {"ref":"+# seconds to Avian's Flight Duration","dp":true,"better":1,"matchers":[{"string":"# 秒飛羽飄翔持續時間"}],"trade":{"ids":{"explicit":["explicit.stat_1251731548"]}}}
